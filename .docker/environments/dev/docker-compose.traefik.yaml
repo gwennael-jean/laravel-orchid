@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  database:
+    labels:
+      - traefik.enable=false
+
+  web:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.laravel_https.tls=true
+      - traefik.http.routers.laravel_https.rule=Host(`laravel.local`)
+      - traefik.http.routers.laravel_https.entryPoints=websecure
+
+  phpmyadmin:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.laravel_phpmyadmin.tls=true
+      - traefik.http.routers.laravel_phpmyadmin.rule=Host(`phpmyadmin.laravel.local`)
+      - traefik.http.routers.laravel_phpmyadmin.entryPoints=websecure
+
+  node:
+    command: npm run watch
+
+  smtp:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.laravel_maildev.tls=true
+      - traefik.http.routers.laravel_maildev.rule=Host(`maildev.laravel.local`)
+      - traefik.http.routers.laravel_maildev.entryPoints=websecure
+      - traefik.http.services.laravel_maildev.loadbalancer.server.port=1080
+
+  traefik:
+    image: traefik:v2.3
+    ports:
+      - ${PORT_HTTP}:80
+      - ${PORT_HTTPS}:443
+      - ${PORT_TRAEFIK}:8080
+    volumes:
+      - ${DOCKER_SOCK}:/var/run/docker.sock:ro
+      - ./services/traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./services/traefik/certs:/etc/certs/:ro
+      - ./services/traefik/confs:/etc/traefik/confs/:ro

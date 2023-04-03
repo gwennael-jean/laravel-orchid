@@ -1,0 +1,5 @@
+tls:
+  certificates:
+    -
+      certFile: /etc/certs/laravel.local.pem
+      keyFile: /etc/certs/laravel.local-key.pem
