@@ -28,18 +28,40 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
-            Menu::make('Example screen')
+            Menu::make(__('Dashboard'))
                 ->icon('monitor')
-                ->route('platform.example')
-                ->title('Navigation')
+                ->route('platform.index')
                 ->badge(fn () => 6),
 
-            Menu::make('Dropdown menu')
+            Menu::make(__('Posts'))
+                ->title('Blog')
+                ->icon('note')
+                ->route('platform.post'),
+
+            Menu::make(__('Comments'))
+                ->icon('bubble'),
+
+            Menu::make(__('Other'))
                 ->icon('code')
                 ->list([
-                    Menu::make('Sub element item 1')->icon('bag'),
-                    Menu::make('Sub element item 2')->icon('heart'),
+                    Menu::make('Category')->icon('bag'),
+                    Menu::make('Taxonomy')->icon('heart'),
                 ]),
+
+            Menu::make(__('Users'))
+                ->icon('user')
+                ->route('platform.systems.users')
+                ->permission('platform.systems.users')
+                ->title(__('Access rights')),
+
+            Menu::make(__('Roles'))
+                ->icon('lock')
+                ->route('platform.systems.roles')
+                ->permission('platform.systems.roles')
+                ->divider(),
+
+
+
 
             Menu::make('Basic Elements')
                 ->title('Form controls')
@@ -71,24 +93,14 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Documentation')
                 ->title('Docs')
                 ->icon('docs')
-                ->url('https://orchid.software/en/docs'),
+                ->url('https://orchid.software/en/docs')
+                ->target('_blank'),
 
             Menu::make('Changelog')
                 ->icon('shuffle')
                 ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
                 ->target('_blank')
                 ->badge(fn () => Dashboard::version(), Color::DARK()),
-
-            Menu::make(__('Users'))
-                ->icon('user')
-                ->route('platform.systems.users')
-                ->permission('platform.systems.users')
-                ->title(__('Access rights')),
-
-            Menu::make(__('Roles'))
-                ->icon('lock')
-                ->route('platform.systems.roles')
-                ->permission('platform.systems.roles'),
         ];
     }
 

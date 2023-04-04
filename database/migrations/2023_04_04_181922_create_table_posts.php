@@ -17,11 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->string('body');
+            $table->text('body');
             $table->boolean('enabled')->default(1);
             $table->boolean('draft')->default(0);
             $table->boolean('sticky')->default(0);
-            $table->dateTime('published_at');
+            $table->dateTime('published_at')->nullable();
             $table->timestamps();
         });
     }
